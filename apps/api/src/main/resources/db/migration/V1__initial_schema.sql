@@ -1,0 +1,13 @@
+CREATE TABLE posts (
+    id UUID PRIMARY KEY,
+    slug VARCHAR(160) NOT NULL UNIQUE,
+    title VARCHAR(240) NOT NULL,
+    excerpt VARCHAR(500),
+    body TEXT NOT NULL,
+    status VARCHAR(24) NOT NULL,
+    published_at TIMESTAMP WITH TIME ZONE,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX posts_status_published_at_idx ON posts (status, published_at DESC);
