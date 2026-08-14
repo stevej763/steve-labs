@@ -50,13 +50,13 @@ Copy `.env.example` to `.env` before changing local connection or storage settin
 
 The first migration creates the `posts` table, but no content API or editor has been implemented yet. The work is intentionally sequenced so the public contract and access boundary are established before the editorial UI depends on them.
 
-1. **Post contract and public read API**: define immutable response DTOs and implement `GET /api/v1/posts` plus `GET /api/v1/posts/{slug}`. Return only published posts, ordered newest first, with clear `404` handling and controller/service/repository tests.
-2. **Editorial post API**: add protected create, update, list-all, publish, and unpublish operations. Define draft/published status transitions in the API, validate slugs, and add database-backed integration tests.
-3. **Admin authentication**: replace the temporary HTTP Basic scaffold with a chosen identity model, beginning with a local administrator. Enforce authorization for every editorial route and add login/session handling in `apps/admin`.
-4. **Admin editor**: connect the dashboard to the protected API, add post list, create/edit form, preview, explicit publish controls, loading/error states, and unsaved-change protection.
-5. **Public blog integration**: replace the starter content in `apps/web` with API-backed post listing and slug pages, including empty, loading, and not-found states. Add metadata and canonical URLs for published posts.
-6. **Media workflow**: add API-managed S3/MinIO uploads with content-type and size validation, then attach media references to posts. Keep binary data outside PostgreSQL.
-7. **Production hardening**: configure deployment-specific CORS, credentials, secrets, backups, observability, rate limiting, and CI checks. Place admin behind its intended network/access controls.
+1. **Post contract and public read API**: complete. `GET /api/v1/posts` and `GET /api/v1/posts/{slug}` expose published posts only.
+2. **Editorial post API**: complete. Protected draft creation, editing, listing, publishing, and unpublishing enforce slug validation and lifecycle rules.
+3. **Admin authentication**: complete for local development. The API provides a configurable local administrator with a browser session login; `ADMIN_USERNAME` and `ADMIN_PASSWORD` must be changed outside local development.
+4. **Admin editor**: complete as an initial usable editor. It supports login, list, draft creation/editing, and publish/unpublish. Preview and unsaved-change protection remain refinements.
+5. **Public blog integration**: complete. The public site lists published API posts and includes loading, empty, not-found, and individual slug page states. Server-rendered metadata and canonical URLs remain an SEO refinement.
+6. **Media workflow**: complete for featured images. Authenticated uploads go through the API to private MinIO/S3 storage with type and size limits; the admin editor supports upload, preview, removal, and post attachment, while public images are served through the API. Inline body images and a reusable media library remain future enhancements.
+7. **Production hardening**: partially complete. CORS and environment-based configuration are present. Before deployment, use a production identity provider or hardened identity service, configure secret management, backups, rate limits, monitoring, and network restrictions for admin.
 
 Before starting step 3, choose the production identity provider or explicitly confirm a self-managed credential model. That decision determines how admin sessions and production authorization should work.
 

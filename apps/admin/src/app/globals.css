@@ -35,4 +35,12 @@ button { cursor: pointer; font: inherit; }
 .empty-state { padding: 58px 22px; text-align: center; }
 .empty-state p { margin: 0 0 7px; color: var(--moss); font-weight: 750; }
 .empty-state span { color: #597068; font-size: .9rem; }
+.login-shell { display: grid; place-items: center; }
+.login-panel { width: min(100%, 390px); border: 1px solid #c5cdc6; border-radius: 6px; padding: 28px; background: #f9faf7; }
+.login-panel h1 { margin: 0; color: var(--moss); font-size: 2rem; }
+.login-panel form, .post-editor { display: grid; gap: 16px; margin-top: 24px; }
+.login-panel label, .post-editor label { display: grid; gap: 6px; color: #597068; font-size: .84rem; font-weight: 650; }
+.login-panel input, .post-editor input, .post-editor textarea { width: 100%; border: 1px solid #bfc9c1; border-radius: 4px; padding: 9px; background: white; color: var(--ink); font: inherit; }
+.post-editor { padding: 22px; }.post-editor textarea { min-height: 100px; resize: vertical; }.post-editor > div, .post-actions { display: flex; justify-content: flex-end; gap: 8px; }.post-editor button { border: 0; border-radius: 5px; padding: 9px 13px; background: var(--moss); color: white; font-weight: 700; }.form-error { color: #a53a2a; font-size: .86rem; }.post-list article { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 17px 22px; border-top: 1px solid #d8ded9; }.post-list h3 { margin: 0; color: var(--moss); }.post-list span { color: #597068; font-size: .82rem; }
+.image-upload { display: grid; gap: 10px; }.image-upload img { width: min(100%, 360px); max-height: 220px; border-radius: 5px; object-fit: cover; }.upload-control { width: fit-content; border: 1px dashed #8ca197; border-radius: 5px; padding: 14px; color: var(--moss); cursor: pointer; }.upload-control input { display: none; }
 @media (max-width: 540px) { .admin-shell { padding: 28px 18px; } .admin-summary { grid-template-columns: 1fr; } }

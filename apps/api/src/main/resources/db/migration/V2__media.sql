@@ -1,0 +1,10 @@
+CREATE TABLE media (
+    id UUID PRIMARY KEY,
+    object_key VARCHAR(512) NOT NULL UNIQUE,
+    original_filename VARCHAR(255) NOT NULL,
+    content_type VARCHAR(100) NOT NULL,
+    size_bytes BIGINT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE posts ADD COLUMN media_id UUID REFERENCES media(id);
