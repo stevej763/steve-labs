@@ -30,16 +30,18 @@ services:
   api:
     build: ./apps/api
     environment:
-      DATABASE_URL: jdbc:postgresql://postgres:5432/steves_lab
-      DATABASE_USERNAME: steves_lab
-      DATABASE_PASSWORD: steves_lab
-      S3_ENDPOINT: http://minio:9000
-      S3_BUCKET: steves-lab-media
-      S3_ACCESS_KEY: minioadmin
-      S3_SECRET_KEY: minioadmin
+      DATABASE_URL: ${DATABASE_URL:-jdbc:postgresql://postgres:5432/steves_lab}
+      DATABASE_USERNAME: ${DATABASE_USERNAME:-steves_lab}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-steves_lab}
+      S3_ENDPOINT: ${S3_ENDPOINT:-http://minio:9000}
+      S3_PUBLIC_ENDPOINT: ${S3_PUBLIC_ENDPOINT:-http://localhost:8080}
+      S3_REGION: ${S3_REGION:-eu-west-2}
+      S3_BUCKET: ${S3_BUCKET:-steves-lab-media}
+      S3_ACCESS_KEY: ${S3_ACCESS_KEY:-minioadmin}
+      S3_SECRET_KEY: ${S3_SECRET_KEY:-minioadmin}
       ADMIN_USERNAME: ${ADMIN_USERNAME:-admin}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
-      CORS_ALLOWED_ORIGINS: http://localhost:3000,http://localhost:3001
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:3001}
     ports:
       - "8080:8080"
     depends_on:

@@ -37,6 +37,8 @@ This starts PostgreSQL, MinIO, the API, the public app, and admin. Stop it with 
 
 `NEXT_PUBLIC_API_BASE_URL` is a Next.js build-time setting, not a container runtime setting. For a deployment, set it in the server `.env` before building, then rebuild `web` and `admin`; for example `NEXT_PUBLIC_API_BASE_URL=https://blog-api.steve-labs.uk`.
 
+All API runtime values in `compose.yaml` use `${VARIABLE:-local-default}` syntax. A server `.env` beside Compose can therefore override database, S3, admin, and CORS configuration without editing the tracked Compose file. After changing API runtime values, run `docker compose up -d --force-recreate api`; after changing `NEXT_PUBLIC_API_BASE_URL`, rebuild `web` and `admin` as described above.
+
 ### Run applications directly
 
 Use this loop when you want fast frontend or backend reloads while keeping dependencies in containers:
