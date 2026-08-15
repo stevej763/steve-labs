@@ -1,6 +1,7 @@
 package uk.stevelab.api.media;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -36,6 +37,12 @@ class MediaService {
 		this.s3Client = s3Client;
 		this.bucket = bucket;
 		this.publicEndpoint = publicEndpoint;
+	}
+
+	List<MediaResponse> listAll() {
+		return mediaRepository.findAll().stream()
+			.map(media -> MediaResponse.from(media, "/api/v1/media/" + media.getId()))
+			.toList();
 	}
 
 	MediaResponse upload(MultipartFile file) {

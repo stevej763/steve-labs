@@ -10,6 +10,7 @@ test("renders markdown blocks and inline formatting", () => {
   assert.match(html, /<strong>bold<\/strong>/);
   assert.match(html, /<em>italic<\/em>/);
   assert.match(html, /<a href="https:\/\/example.com">link<\/a>/);
+  assert.match(markdownToHtml("![Sample image](/api/v1/media/example)"), /<img src="\/api\/v1\/media\/example" alt="Sample image">/);
   assert.match(html, /<ul>/);
   assert.match(html, /<pre><code class="language-js">/);
   assert.match(html, /const answer = 42;/);

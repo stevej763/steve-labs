@@ -52,4 +52,5 @@ class Media {
 	String getOriginalFilename() { return originalFilename; }
 	String getContentType() { return contentType; }
 	long getSizeBytes() { return sizeBytes; }
+	Instant getCreatedAt() { return createdAt; }
 }

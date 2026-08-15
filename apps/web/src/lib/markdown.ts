@@ -11,6 +11,7 @@ function renderInline(value: string): string {
   let rendered = escapeHtml(value);
 
   rendered = rendered.replace(/`([^`]+)`/g, (_, code: string) => `<code>${escapeHtml(code)}</code>`);
+  rendered = rendered.replace(/!\[([^\]]*)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g, (_, alt: string, src: string) => `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}">`);
   rendered = rendered.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+|\/[^\s)]+)\)/g, (_, label: string, href: string) => `<a href="${escapeHtml(href)}">${escapeHtml(label)}</a>`);
   rendered = rendered.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
   rendered = rendered.replace(/__(.+?)__/g, "<strong>$1</strong>");

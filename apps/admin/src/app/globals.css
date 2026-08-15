@@ -478,6 +478,66 @@ button {
   color: inherit;
 }
 
+.media-library {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow-y: auto;
+}
+
+.media-library > p:first-child {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.media-item {
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.media-item:hover {
+  border-color: var(--moss);
+  box-shadow: 0 2px 8px rgb(34 90 75 / 0.15);
+  transform: translateY(-2px);
+}
+
+.media-item img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.media-item p {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.85rem;
+  font-weight: 600;
+  word-break: break-word;
+  line-height: 1.2;
+}
+
+.media-item span {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
 .preview-excerpt {
   max-width: 100%;
   color: var(--text-secondary);
