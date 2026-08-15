@@ -48,8 +48,6 @@ Copy `.env.example` to `.env` before changing local connection or storage settin
 
 ## Publishing roadmap
 
-The first migration creates the `posts` table, but no content API or editor has been implemented yet. The work is intentionally sequenced so the public contract and access boundary are established before the editorial UI depends on them.
-
 1. **Post contract and public read API**: complete. `GET /api/v1/posts` and `GET /api/v1/posts/{slug}` expose published posts only.
 2. **Editorial post API**: complete. Protected draft creation, editing, listing, publishing, and unpublishing enforce slug validation and lifecycle rules.
 3. **Admin authentication**: complete for local development. The API provides a configurable local administrator with a browser session login; `ADMIN_USERNAME` and `ADMIN_PASSWORD` must be changed outside local development.
@@ -58,7 +56,19 @@ The first migration creates the `posts` table, but no content API or editor has 
 6. **Media workflow**: complete for featured images. Authenticated uploads go through the API to private MinIO/S3 storage with type and size limits; the admin editor supports upload, preview, removal, and post attachment, while public images are served through the API. Inline body images and a reusable media library remain future enhancements.
 7. **Production hardening**: partially complete. CORS and environment-based configuration are present. Before deployment, use a production identity provider or hardened identity service, configure secret management, backups, rate limits, monitoring, and network restrictions for admin.
 
-Before starting step 3, choose the production identity provider or explicitly confirm a self-managed credential model. That decision determines how admin sessions and production authorization should work.
+## Next Session Backlog
+
+Work through these in order. Each item is deliberately small enough to be designed, implemented, and validated as one coherent slice.
+
+1. **Protect editorial work**: add an unsaved-changes warning and a preview mode to the admin editor. The current editor can discard changes when navigating away, and authors cannot inspect a post before publishing it.
+2. **Make the public site SEO-ready**: render post data on the server, add per-post metadata, canonical URLs, Open Graph images, a sitemap, and `robots.txt`. The current browser-side data fetching is functional but not an ideal production blog surface.
+3. **Improve the writing model**: choose Markdown as the first content format, render it safely on the public site, and add formatting assistance in the editor. Keep raw HTML disabled or sanitised.
+4. **Expand the media workflow**: add a media library view with image metadata, reuse existing uploads, and support inserting images into Markdown body content. Define deletion rules so images referenced by posts cannot be removed accidentally.
+5. **Add editorial organisation**: introduce tags first, then optional series/categories. Add corresponding public filtering and archive pages only after their API and database contracts are stable.
+6. **Harden authentication for deployment**: choose an identity provider or a managed authentication approach, remove the local default credential fallback, and limit the admin deployment to its intended access boundary.
+7. **Operationalise deployment**: add CI for API tests, frontend lint/build, and image builds; define production environment variables and secret storage; configure database backups, object-storage lifecycle rules, structured logs, and uptime/error monitoring.
+
+The recommended first task is **editorial safety and preview**. It directly improves the next authoring session without committing the project to a content format or external identity provider.
 
 ## Quality checks
 
