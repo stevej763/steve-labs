@@ -49,9 +49,10 @@ services:
         condition: service_started
 
   web:
-    build: ./apps/web
-    environment:
-      NEXT_PUBLIC_API_BASE_URL: http://localhost:8080
+    build:
+      context: ./apps/web
+      args:
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8080}
     ports:
       - "3000:3000"
     depends_on:
@@ -59,9 +60,10 @@ services:
         condition: service_started
 
   admin:
-    build: ./apps/admin
-    environment:
-      NEXT_PUBLIC_API_BASE_URL: http://localhost:8080
+    build:
+      context: ./apps/admin
+      args:
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8080}
     ports:
       - "3001:3000"
     depends_on:

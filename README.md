@@ -35,6 +35,8 @@ docker compose ps
 
 This starts PostgreSQL, MinIO, the API, the public app, and admin. Stop it with `docker compose down`; append `--volumes` only when you deliberately want to discard local database and object-storage data.
 
+`NEXT_PUBLIC_API_BASE_URL` is a Next.js build-time setting, not a container runtime setting. For a deployment, set it in the server `.env` before building, then rebuild `web` and `admin`; for example `NEXT_PUBLIC_API_BASE_URL=https://blog-api.steve-labs.uk`.
+
 ### Run applications directly
 
 Use this loop when you want fast frontend or backend reloads while keeping dependencies in containers:
