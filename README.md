@@ -60,7 +60,7 @@ Copy `.env.example` to `.env` before changing local connection or storage settin
 
 Work through these in order. Each item is deliberately small enough to be designed, implemented, and validated as one coherent slice.
 
-1. **Protect editorial work**: add an unsaved-changes warning and a preview mode to the admin editor. The current editor can discard changes when navigating away, and authors cannot inspect a post before publishing it.
+1. **Protect editorial work**: complete. The admin editor tracks unsaved changes, warns before discarding a draft or closing the page, and has a local preview mode for title, featured image, excerpt, and body.
 2. **Make the public site SEO-ready**: render post data on the server, add per-post metadata, canonical URLs, Open Graph images, a sitemap, and `robots.txt`. The current browser-side data fetching is functional but not an ideal production blog surface.
 3. **Improve the writing model**: choose Markdown as the first content format, render it safely on the public site, and add formatting assistance in the editor. Keep raw HTML disabled or sanitised.
 4. **Expand the media workflow**: add a media library view with image metadata, reuse existing uploads, and support inserting images into Markdown body content. Define deletion rules so images referenced by posts cannot be removed accidentally.
@@ -68,7 +68,7 @@ Work through these in order. Each item is deliberately small enough to be design
 6. **Harden authentication for deployment**: choose an identity provider or a managed authentication approach, remove the local default credential fallback, and limit the admin deployment to its intended access boundary.
 7. **Operationalise deployment**: add CI for API tests, frontend lint/build, and image builds; define production environment variables and secret storage; configure database backups, object-storage lifecycle rules, structured logs, and uptime/error monitoring.
 
-The recommended first task is **editorial safety and preview**. It directly improves the next authoring session without committing the project to a content format or external identity provider.
+The recommended next task is **server-rendered SEO**. It makes the public blog discoverable and shareable without committing the project to a content format or external identity provider.
 
 ## Quality checks
 
