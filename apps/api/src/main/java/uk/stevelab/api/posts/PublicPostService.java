@@ -4,6 +4,7 @@ import java.util.List;
 
 import uk.stevelab.api.media.MediaUrlResolver;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 class PublicPostService {
@@ -16,6 +17,7 @@ class PublicPostService {
 		this.mediaUrlResolver = mediaUrlResolver;
 	}
 
+	@Transactional(readOnly = true)
 	List<PublicPostResponse> listPosts() {
 		return postRepository.findByStatusOrderByPublishedAtDesc(PostStatus.PUBLISHED)
 			.stream()
@@ -23,6 +25,7 @@ class PublicPostService {
 			.toList();
 	}
 
+	@Transactional(readOnly = true)
 	PublicPostResponse findPost(String slug) {
 		return postRepository.findBySlugAndStatus(slug, PostStatus.PUBLISHED)
 			.map(post -> PublicPostResponse.from(post, mediaUrlResolver.resolve(post.getFeaturedMediaId())))

@@ -5,6 +5,7 @@ export type PublicPost = {
   body: string;
   publishedAt: string;
   featuredImageUrl: string | null;
+  tags: string[];
 };
 
 const publicApiUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";

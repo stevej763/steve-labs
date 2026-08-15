@@ -1,6 +1,8 @@
 package uk.stevelab.api.posts;
 
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import jakarta.persistence.Column;
@@ -8,6 +10,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -38,6 +43,10 @@ public class Post {
 
 	@Column(name = "media_id")
 	private UUID featuredMediaId;
+
+	@ManyToMany
+	@JoinTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"), inverseJoinColumns = @JoinColumn(name = "tag_slug"))
+	private Set<Tag> tags = new LinkedHashSet<>();
 
 	@Column(nullable = false, updatable = false)
 	private Instant createdAt;
@@ -90,12 +99,18 @@ public class Post {
 		return featuredMediaId;
 	}
 
-	void update(String slug, String title, String excerpt, String body, UUID featuredMediaId) {
+	Set<Tag> getTags() {
+		return tags;
+	}
+
+	void update(String slug, String title, String excerpt, String body, UUID featuredMediaId, Set<Tag> tags) {
 		this.slug = slug;
 		this.title = title;
 		this.excerpt = excerpt;
 		this.body = body;
 		this.featuredMediaId = featuredMediaId;
+		this.tags.clear();
+		this.tags.addAll(tags);
 	}
 
 	void publish(Instant publishedAt) {

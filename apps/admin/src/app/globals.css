@@ -397,6 +397,32 @@ button {
   font-weight: 700;
 }
 
+.tag-editor {
+  display: grid;
+  gap: 8px;
+  padding: 16px 28px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  font-size: 0.87rem;
+  font-weight: 650;
+}
+
+.tag-editor input {
+  width: 100%;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 10px 12px;
+  background: white;
+  color: var(--ink);
+  font: inherit;
+}
+
+.tag-editor input:focus {
+  outline: none;
+  border-color: var(--moss);
+  box-shadow: 0 0 0 3px rgb(34 90 75 / 0.1);
+}
+
 .draft-preview {
   max-width: 100%;
   padding: 48px;

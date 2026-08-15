@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 class EditorialPostControllerTests {
 
 	private static final String JSON = """
-		{"slug":"first-post","title":"First post","excerpt":"A short note","body":"The full draft."}
+		{"slug":"first-post","title":"First post","excerpt":"A short note","body":"The full draft.","tags":["java","spring-boot"]}
 		""";
 
 	@Autowired
@@ -53,7 +53,8 @@ class EditorialPostControllerTests {
 		mockMvc.perform(get("/api/v1/admin/posts"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.length()").value(1))
-			.andExpect(jsonPath("$[0].status").value("DRAFT"));
+			.andExpect(jsonPath("$[0].status").value("DRAFT"))
+			.andExpect(jsonPath("$[0].tags[0]").value("java"));
 	}
 
 	@Test
@@ -68,9 +69,10 @@ class EditorialPostControllerTests {
 
 		mockMvc.perform(put("/api/v1/admin/posts/{id}", id)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{\"slug\":\"edited-post\",\"title\":\"Edited post\",\"excerpt\":\"Edited excerpt\",\"body\":\"Edited body.\"}"))
+				.content("{\"slug\":\"edited-post\",\"title\":\"Edited post\",\"excerpt\":\"Edited excerpt\",\"body\":\"Edited body.\",\"tags\":[\"editorial\"]}"))
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.slug").value("edited-post"));
+			.andExpect(jsonPath("$.slug").value("edited-post"))
+			.andExpect(jsonPath("$.tags[0]").value("editorial"));
 
 		mockMvc.perform(post("/api/v1/admin/posts/{id}/publish", id))
 			.andExpect(status().isOk())

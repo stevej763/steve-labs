@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -26,12 +27,18 @@ class PublicPostControllerTests {
 	@Autowired
 	private PostRepository postRepository;
 
+	@Autowired
+	private TagRepository tagRepository;
+
 	@BeforeEach
 	void setUp() {
 		postRepository.deleteAll();
-		postRepository.save(new Post(
+		var tag = tagRepository.save(new Tag("spring-boot"));
+		var published = new Post(
 			UUID.randomUUID(), "published-note", "Published note", "A visible excerpt", "Published body",
-			PostStatus.PUBLISHED, Instant.parse("2026-08-10T09:00:00Z")));
+			PostStatus.PUBLISHED, Instant.parse("2026-08-10T09:00:00Z"));
+		published.update("published-note", "Published note", "A visible excerpt", "Published body", null, Set.of(tag));
+		postRepository.save(published);
 		postRepository.save(new Post(
 			UUID.randomUUID(), "private-draft", "Private draft", "A hidden excerpt", "Draft body",
 			PostStatus.DRAFT, null));
@@ -43,7 +50,8 @@ class PublicPostControllerTests {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.length()").value(1))
 			.andExpect(jsonPath("$[0].slug").value("published-note"))
-			.andExpect(jsonPath("$[0].body").value("Published body"));
+			.andExpect(jsonPath("$[0].body").value("Published body"))
+			.andExpect(jsonPath("$[0].tags[0]").value("spring-boot"));
 	}
 
 	@Test
@@ -51,7 +59,8 @@ class PublicPostControllerTests {
 		mockMvc.perform(get("/api/v1/posts/published-note"))
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.title").value("Published note"))
-			.andExpect(jsonPath("$.publishedAt").value("2026-08-10T09:00:00Z"));
+			.andExpect(jsonPath("$.publishedAt").value("2026-08-10T09:00:00Z"))
+			.andExpect(jsonPath("$.tags[0]").value("spring-boot"));
 	}
 
 	@Test

@@ -1,7 +1,9 @@
 package uk.stevelab.api.posts;
 
 import java.time.Instant;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import uk.stevelab.api.media.MediaUrlResolver;
@@ -12,10 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 class EditorialPostService {
 
 	private final PostRepository postRepository;
+	private final TagRepository tagRepository;
 	private final MediaUrlResolver mediaUrlResolver;
 
-	EditorialPostService(PostRepository postRepository, MediaUrlResolver mediaUrlResolver) {
+	EditorialPostService(PostRepository postRepository, TagRepository tagRepository, MediaUrlResolver mediaUrlResolver) {
 		this.postRepository = postRepository;
+		this.tagRepository = tagRepository;
 		this.mediaUrlResolver = mediaUrlResolver;
 	}
 
@@ -30,7 +34,7 @@ class EditorialPostService {
 		ensureSlugIsAvailable(request.slug(), null);
 		var post = new Post(UUID.randomUUID(), request.slug(), request.title(), request.excerpt(), request.body(),
 			PostStatus.DRAFT, null);
-		post.update(request.slug(), request.title(), request.excerpt(), request.body(), request.featuredMediaId());
+		post.update(request.slug(), request.title(), request.excerpt(), request.body(), request.featuredMediaId(), resolveTags(request.tags()));
 		return response(postRepository.save(post));
 	}
 
@@ -38,7 +42,7 @@ class EditorialPostService {
 	EditorialPostResponse updatePost(UUID id, EditorialPostRequest request) {
 		var post = findPost(id);
 		ensureSlugIsAvailable(request.slug(), id);
-		post.update(request.slug(), request.title(), request.excerpt(), request.body(), request.featuredMediaId());
+		post.update(request.slug(), request.title(), request.excerpt(), request.body(), request.featuredMediaId(), resolveTags(request.tags()));
 		return response(post);
 	}
 
@@ -72,5 +76,19 @@ class EditorialPostService {
 
 	private EditorialPostResponse response(Post post) {
 		return EditorialPostResponse.from(post, mediaUrlResolver.resolve(post.getFeaturedMediaId()));
+	}
+
+	private Set<Tag> resolveTags(Set<String> slugs) {
+		if (slugs == null || slugs.isEmpty()) {
+			return Set.of();
+		}
+		var tagsBySlug = tagRepository.findBySlugIn(slugs).stream()
+			.collect(java.util.stream.Collectors.toMap(Tag::getSlug, tag -> tag));
+		var tags = new LinkedHashSet<Tag>();
+		for (var slug : slugs) {
+			var tag = tagsBySlug.get(slug);
+			tags.add(tag != null ? tag : tagRepository.save(new Tag(slug)));
+		}
+		return tags;
 	}
 }
