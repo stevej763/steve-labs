@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { markdownToHtml } from "@/lib/markdown";
 import { getPost, mediaUrl } from "@/lib/posts";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -29,5 +30,5 @@ export default async function PostPage({ params }: Props) {
   const post = await getPost(slug);
   if (!post) notFound();
 
-  return <main className="site-shell"><nav className="site-nav"><Link className="wordmark" href="/">Steve&apos;s Lab</Link><Link href="/">All writing</Link></nav><article className="post-page"><p className="eyebrow">Published {new Date(post.publishedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</p><h1>{post.title}</h1>{post.featuredImageUrl && <img className="post-hero-image" src={mediaUrl(post.featuredImageUrl) ?? ""} alt="" />}{post.excerpt && <p className="intro">{post.excerpt}</p>}<div className="post-body">{post.body.split("\n").map((paragraph, index) => <p key={`${paragraph}-${index}`}>{paragraph}</p>)}</div></article></main>;
+  return <main className="site-shell"><nav className="site-nav"><Link className="wordmark" href="/">Steve&apos;s Lab</Link><Link href="/">All writing</Link></nav><article className="post-page"><p className="eyebrow">Published {new Date(post.publishedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</p><h1>{post.title}</h1>{post.featuredImageUrl && <img className="post-hero-image" src={mediaUrl(post.featuredImageUrl) ?? ""} alt="" />}{post.excerpt && <p className="intro">{post.excerpt}</p>}<div className="post-body" dangerouslySetInnerHTML={{ __html: markdownToHtml(post.body) }} /></article></main>;
 }

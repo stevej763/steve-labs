@@ -73,8 +73,11 @@ Work through these in order. Each item is deliberately small enough to be design
 5. **Add editorial organisation**: introduce tags first, then optional series/categories. Add corresponding public filtering and archive pages only after their API and database contracts are stable.
 6. **Harden authentication for deployment**: choose an identity provider or a managed authentication approach, remove the local default credential fallback, and limit the admin deployment to its intended access boundary.
 7. **Operationalise deployment**: add CI for API tests, frontend lint/build, and image builds; define production environment variables and secret storage; configure database backups, object-storage lifecycle rules, structured logs, and uptime/error monitoring.
+8. **Add post lifecycle affordances**: support scheduled publishing, a clear published-at editor control, and a post delete/archive action with an explicit confirmation flow. Keep public visibility changes owned by the API.
+9. **Make the public site easier to browse**: add a writing index with pagination, an archive by month/year, a lightweight RSS feed, and a contact/about page. Build these on the settled post and tag contracts.
+10. **Establish quality and accessibility baselines**: add API contract tests, browser-level end-to-end tests for publish and media upload, accessibility checks for public/admin flows, and a small performance budget for the public site.
 
-The recommended next task is **server-rendered SEO**. It makes the public blog discoverable and shareable without committing the project to a content format or external identity provider.
+The recommended next task is **Markdown authoring and rendering**. It makes the editor suitable for real blog writing and establishes the content format that inline media, code blocks, and richer previews will build on.
 
 ## Quality checks
 
