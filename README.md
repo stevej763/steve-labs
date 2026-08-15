@@ -35,7 +35,9 @@ docker compose ps
 
 This starts PostgreSQL, MinIO, the API, the public app, and admin. Stop it with `docker compose down`; append `--volumes` only when you deliberately want to discard local database and object-storage data.
 
-`NEXT_PUBLIC_API_BASE_URL` is a Next.js build-time setting, not a container runtime setting. For a deployment, set it in the server `.env` before building, then rebuild `web` and `admin`; for example `NEXT_PUBLIC_API_BASE_URL=https://blog-api.steve-labs.uk`.
+`NEXT_PUBLIC_API_BASE_URL` and `NEXT_PUBLIC_SITE_URL` are Next.js build-time settings, not container runtime settings. For a deployment, set them in the server `.env` before building, then rebuild `web` and `admin`; for example `NEXT_PUBLIC_API_BASE_URL=https://blog-api.steve-labs.uk` and `NEXT_PUBLIC_SITE_URL=https://blog.steve-labs.uk`.
+
+The public web server uses the internal Compose address `http://api:8080` for server-rendered post requests. It deliberately differs from `NEXT_PUBLIC_API_BASE_URL`, which is the browser-facing URL used for public media links.
 
 All API runtime values in `compose.yaml` use `${VARIABLE:-local-default}` syntax. A server `.env` beside Compose can therefore override database, S3, admin, and CORS configuration without editing the tracked Compose file. After changing API runtime values, run `docker compose up -d --force-recreate api`; after changing `NEXT_PUBLIC_API_BASE_URL`, rebuild `web` and `admin` as described above.
 
@@ -65,7 +67,7 @@ Copy `.env.example` to `.env` before changing local connection or storage settin
 Work through these in order. Each item is deliberately small enough to be designed, implemented, and validated as one coherent slice.
 
 1. **Protect editorial work**: complete. The admin editor tracks unsaved changes, warns before discarding a draft or closing the page, and has a local preview mode for title, featured image, excerpt, and body.
-2. **Make the public site SEO-ready**: render post data on the server, add per-post metadata, canonical URLs, Open Graph images, a sitemap, and `robots.txt`. The current browser-side data fetching is functional but not an ideal production blog surface.
+2. **Make the public site SEO-ready**: complete. Public post data is server-rendered with per-post metadata, canonical URLs, Open Graph data, a revalidating sitemap, and `robots.txt`.
 3. **Improve the writing model**: choose Markdown as the first content format, render it safely on the public site, and add formatting assistance in the editor. Keep raw HTML disabled or sanitised.
 4. **Expand the media workflow**: add a media library view with image metadata, reuse existing uploads, and support inserting images into Markdown body content. Define deletion rules so images referenced by posts cannot be removed accidentally.
 5. **Add editorial organisation**: introduce tags first, then optional series/categories. Add corresponding public filtering and archive pages only after their API and database contracts are stable.

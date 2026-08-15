@@ -1,13 +1,10 @@
-"use client";
+import Link from "next/link";
+import { getPosts, mediaUrl } from "@/lib/posts";
 
-import { useEffect, useState } from "react";
+export const dynamic = "force-dynamic";
 
-type Post = { slug: string; title: string; excerpt: string | null; body: string; publishedAt: string; featuredImageUrl: string | null };
-const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8080";
-
-export default function Home() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  useEffect(() => { fetch(`${apiUrl}/api/v1/posts`).then((response) => response.ok ? response.json() : []).then(setPosts).catch(() => setPosts([])); }, []);
+export default async function Home() {
+  const posts = await getPosts();
   const featured = posts[0];
   return (
     <main className="site-shell">
@@ -30,15 +27,15 @@ export default function Home() {
         <p className="section-label">Latest experiment</p>
         <article>
           <p className="post-meta">Published {new Date(featured.publishedAt).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}</p>
-          {featured.featuredImageUrl && <img className="featured-image" src={`${apiUrl}${featured.featuredImageUrl}`} alt="" />}
+          {featured.featuredImageUrl && <img className="featured-image" src={mediaUrl(featured.featuredImageUrl) ?? ""} alt="" />}
           <h2 id="featured-heading">{featured.title}</h2>
           <p>{featured.excerpt ?? featured.body}</p>
-          <a className="read-link" href={`/posts/${featured.slug}`}>Read the note <span aria-hidden="true">→</span></a>
+          <Link className="read-link" href={`/posts/${featured.slug}`}>Read the note <span aria-hidden="true">→</span></Link>
         </article>
       </section>}
 
       <section className="note-grid" id="notes" aria-label="Recent notes">
-        {posts.slice(featured ? 1 : 0).map((post) => <article key={post.slug}>{post.featuredImageUrl && <img className="post-thumbnail" src={`${apiUrl}${post.featuredImageUrl}`} alt="" />}<p className="post-meta">Published</p><h2><a href={`/posts/${post.slug}`}>{post.title}</a></h2><p>{post.excerpt ?? post.body}</p></article>)}
+        {posts.slice(featured ? 1 : 0).map((post) => <article key={post.slug}>{post.featuredImageUrl && <img className="post-thumbnail" src={mediaUrl(post.featuredImageUrl) ?? ""} alt="" />}<p className="post-meta">Published</p><h2><Link href={`/posts/${post.slug}`}>{post.title}</Link></h2><p>{post.excerpt ?? post.body}</p></article>)}
         {!posts.length && <article><p className="post-meta">Notebook</p><h2>The first note is still on the workbench.</h2></article>}
       </section>
 

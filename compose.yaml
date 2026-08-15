@@ -1,6 +1,7 @@
 services:
   postgres:
     image: postgres:17-alpine
+    container_name: postgres
     environment:
       POSTGRES_DB: steves_lab
       POSTGRES_USER: steves_lab
@@ -17,6 +18,7 @@ services:
 
   minio:
     image: minio/minio:latest
+    container_name: minio
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: minioadmin
@@ -29,6 +31,7 @@ services:
 
   api:
     build: ./apps/api
+    container_name: blog-api
     environment:
       DATABASE_URL: ${DATABASE_URL:-jdbc:postgresql://postgres:5432/steves_lab}
       DATABASE_USERNAME: ${DATABASE_USERNAME:-steves_lab}
@@ -51,10 +54,14 @@ services:
         condition: service_started
 
   web:
+    container_name: blog-web
     build:
       context: ./apps/web
       args:
         NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8080}
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+    environment:
+      INTERNAL_API_URL: http://api:8080
     ports:
       - "3000:3000"
     depends_on:
@@ -62,6 +69,7 @@ services:
         condition: service_started
 
   admin:
+    container_name: blog-admin
     build:
       context: ./apps/admin
       args:
