@@ -15,22 +15,23 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.06rem;
 }
 
 .site-shell { min-height: 100vh; padding: 24px clamp(24px, 7vw, 112px) 36px; background: linear-gradient(105deg, #f7f3eb 0 68%, #e4d8c8 68%); }
 .site-nav, footer { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .wordmark { color: var(--moss); font-size: 1.1rem; font-weight: 750; text-decoration: none; }
-.nav-links { display: flex; gap: 22px; font-size: .9rem; }
+.nav-links { display: flex; gap: 22px; font-size: .98rem; }
 .nav-links a { color: var(--ink); text-decoration: none; }
 .masthead { max-width: 860px; padding: clamp(90px, 15vh, 150px) 0 72px; }
-.eyebrow, .section-label, .post-meta { color: var(--coral); font-size: .75rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
+.eyebrow, .section-label, .post-meta { color: var(--coral); font-size: .82rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; }
 .masthead h1 { max-width: 800px; margin: 14px 0 22px; color: var(--moss); font-size: clamp(3rem, 7vw, 6.5rem); font-weight: 700; letter-spacing: 0; line-height: .96; }
-.intro { max-width: 510px; font-size: 1.18rem; line-height: 1.55; }
+.intro { max-width: 550px; font-size: 1.28rem; line-height: 1.6; }
 .featured { display: grid; grid-template-columns: minmax(130px, .55fr) minmax(0, 2fr); gap: 30px; padding: 40px; background: var(--moss); color: #fffdf7; }
 .featured .section-label, .featured .post-meta { color: var(--sun); }
 .featured h2 { max-width: 650px; margin: 12px 0; font-size: clamp(2rem, 4vw, 3.75rem); letter-spacing: 0; line-height: 1; }
 .featured-image { width: min(100%, 680px); max-height: 360px; margin: 16px 0; object-fit: cover; }
-.featured article > p:not(.post-meta) { max-width: 600px; line-height: 1.6; }
+.featured article > p:not(.post-meta) { max-width: 600px; font-size: 1.1rem; line-height: 1.65; }
 .read-link { display: inline-block; margin-top: 24px; color: #fffdf7; font-weight: 700; text-decoration-color: var(--sun); text-underline-offset: 5px; }
 .note-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin: 48px 0 82px; background: #cfc5b8; }
 .more-posts-label { margin: 48px 0 -36px; }

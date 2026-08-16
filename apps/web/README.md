@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Public Web
 
-## Getting Started
+The public Next.js application for `steve-lab.uk`. It server-renders published posts from the Spring Boot API and must not contain editorial routes or credentials.
 
-First, run the development server:
+## Run Locally
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd ../..
+docker compose up -d postgres minio
+cd apps/api && ./gradlew bootRun # terminal 1
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```bash
+cd ../web # terminal 2
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open `http://localhost:3000`.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## API Access
 
-## Learn More
+- Use `INTERNAL_API_URL` for server-rendered fetches. Docker Compose supplies `http://api:8080`; direct local development normally uses `http://localhost:8080`.
+- Use `NEXT_PUBLIC_API_BASE_URL` only for browser-visible URLs, including media URLs embedded in post Markdown.
+- The public API returns published posts, their optional featured image, and their tags. Post bodies are Markdown rendered by `src/lib/markdown.ts`; raw HTML is escaped.
 
-To learn more about Next.js, take a look at the following resources:
+## Checks
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm run lint
+npm run build
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The Markdown unit test is `src/lib/markdown.test.ts`; run it through the project's configured test tooling when one is added. The raw Node test runner does not resolve the project's extensionless TypeScript imports.
 
-## Deploy on Vercel
+## Deployment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`NEXT_PUBLIC_API_BASE_URL` and `NEXT_PUBLIC_SITE_URL` are build-time variables. Rebuild the app after changing either value.

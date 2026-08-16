@@ -59,7 +59,7 @@ Copy `.env.example` to `.env` before changing local connection or storage settin
 3. **Admin authentication**: complete for local development. The API provides a configurable local administrator with a browser session login; `ADMIN_USERNAME` and `ADMIN_PASSWORD` must be changed outside local development.
 4. **Admin editor**: complete as an initial usable editor. It supports login, list, draft creation/editing, and publish/unpublish. Preview and unsaved-change protection remain refinements.
 5. **Public blog integration**: complete. The public site lists published API posts and includes loading, empty, not-found, and individual slug page states. Server-rendered metadata and canonical URLs remain an SEO refinement.
-6. **Media workflow**: complete for featured images. Authenticated uploads go through the API to private MinIO/S3 storage with type and size limits; the admin editor supports upload, preview, removal, and post attachment, while public images are served through the API. Inline body images and a reusable media library remain future enhancements.
+6. **Media workflow**: complete for featured and inline images. Authenticated uploads go through the API to private MinIO/S3 storage with type and size limits; the admin editor supports upload, preview, removal, reusable-media browsing, and Markdown image insertion. Public images are served through the API. Define deletion rules before adding media deletion.
 7. **Production hardening**: partially complete. CORS and environment-based configuration are present. Before deployment, use a production identity provider or hardened identity service, configure secret management, backups, rate limits, monitoring, and network restrictions for admin.
 
 ## Next Session Backlog
@@ -68,8 +68,8 @@ Work through these in order. Each item is deliberately small enough to be design
 
 1. **Protect editorial work**: complete. The admin editor tracks unsaved changes, warns before discarding a draft or closing the page, and has a local preview mode for title, featured image, excerpt, and body.
 2. **Make the public site SEO-ready**: complete. Public post data is server-rendered with per-post metadata, canonical URLs, Open Graph data, a revalidating sitemap, and `robots.txt`.
-3. **Improve the writing model**: choose Markdown as the first content format, render it safely on the public site, and add formatting assistance in the editor. Keep raw HTML disabled or sanitised.
-4. **Expand the media workflow**: add a media library view with image metadata, reuse existing uploads, and support inserting images into Markdown body content. Define deletion rules so images referenced by posts cannot be removed accidentally.
+3. **Improve the writing model**: complete. Markdown is the content format, raw HTML is escaped, and the editor includes formatting assistance and preview.
+4. **Expand the media workflow**: complete for upload, reuse, and Markdown insertion. Define deletion rules so images referenced by posts cannot be removed accidentally.
 5. **Add editorial organisation**: tags are complete. Posts can be tagged in the admin editor and expose tags through the public API and post pages. Add public filtering, archive pages, and optional series/categories after this tag contract has settled.
 6. **Harden authentication for deployment**: choose an identity provider or a managed authentication approach, remove the local default credential fallback, and limit the admin deployment to its intended access boundary.
 7. **Operationalise deployment**: add CI for API tests, frontend lint/build, and image builds; define production environment variables and secret storage; configure database backups, object-storage lifecycle rules, structured logs, and uptime/error monitoring.
@@ -77,12 +77,14 @@ Work through these in order. Each item is deliberately small enough to be design
 9. **Make the public site easier to browse**: add a writing index with pagination, an archive by month/year, a lightweight RSS feed, and a contact/about page. Build these on the settled post and tag contracts.
 10. **Establish quality and accessibility baselines**: add API contract tests, browser-level end-to-end tests for publish and media upload, accessibility checks for public/admin flows, and a small performance budget for the public site.
 
-The recommended next task is **Markdown authoring and rendering**. It makes the editor suitable for real blog writing and establishes the content format that inline media, code blocks, and richer previews will build on.
+The recommended next task is **public tag filtering and archives**. Add them only once the tags contract remains stable across real editorial use.
 
 ## Quality checks
 
 ```bash
 cd apps/web && npm run lint
+cd apps/web && npm run build
 cd apps/admin && npm run lint
+cd apps/admin && npm run build
 cd apps/api && ./gradlew test
 ```
